@@ -1,5 +1,5 @@
 import * as inversify from "inversify";
-import * as hapi from "hapi";
+import * as hapi from "@hapi/hapi";
 import { interfaces } from "./interfaces";
 import { TYPE, METADATA_KEY } from "./constants";
 
@@ -53,10 +53,7 @@ export class InversifyHapiServer {
         // register server-level middleware before anything else
         if (this.configFn) {
             this.configFn.apply(undefined, [this.app]);
-        } else {
-            this.app.connection({port: 8080});
         }
-
         this.registerControllers();
 
         return this.app;
@@ -88,22 +85,23 @@ export class InversifyHapiServer {
                 let controllerMiddleware = this.resolveMiddleware(...controllerMetadata.middleware);
 
                 methodMetadata.forEach((metadata: interfaces.ControllerMethodMetadata) => {
-                    let handler: hapi.RouteHandler = this.handlerFactory(controllerMetadata.target.name, metadata.key);
+                    let handler: hapi.ServerMethod = this.handlerFactory(controllerMetadata.target.name, metadata.key);
                     let routeOptions: any = typeof metadata.options === "string" ? { path: metadata.options } : metadata.options;
                     let routeMiddleware = this.resolveMiddleware(...metadata.middleware);
 
-                    if (typeof routeOptions.path === "string" && typeof controllerMetadata.path === "string" && controllerMetadata.path !== "/") {
+                    if (typeof routeOptions.path === "string" && 
+                    typeof controllerMetadata.path === "string" && controllerMetadata.path !== "/") {
                         routeOptions.path = controllerMetadata.path + routeOptions.path;
                     } else if (routeOptions.path instanceof RegExp && controllerMetadata.path !== "/") {
                         routeOptions.path = new RegExp(controllerMetadata.path + routeOptions.path.source);
                     }
 
                     this.app.route({
-                        config: {
+                        handler,
+                        method: metadata.method.toUpperCase() as hapi.Util.HTTP_METHODS_PARTIAL,
+                        options: {
                             pre: [...controllerMiddleware, ...routeMiddleware]
                         },
-                        handler: handler,
-                        method: metadata.method.toUpperCase() as hapi.HTTP_METHODS_PARTIAL,
                         path: routeOptions.path
                     });
                 });
@@ -111,36 +109,35 @@ export class InversifyHapiServer {
         });
     }
 
-    private resolveMiddleware(...middleware: interfaces.Middleware[]): hapi.RouteHandler[] {
+    private resolveMiddleware(...middleware: interfaces.Middleware[]): hapi.ServerMethod[] {
         return middleware.map(middlewareItem => {
             try {
-                return this.container.get<hapi.RouteHandler>(middlewareItem);
+                return this.container.get<hapi.ServerMethod>(middlewareItem);
             } catch (_) {
-                return middlewareItem as hapi.RouteHandler;
+                return middlewareItem as hapi.ServerMethod;
             }
         });
     }
 
-    private handlerFactory(controllerName: any, key: string): hapi.RouteHandler {
-        return (req: hapi.Request, reply: hapi.ReplyNoContinue) => {
+    private handlerFactory(controllerName: any, key: string): hapi.ServerMethod {
+        return (req: hapi.Request, handler: hapi.ResponseToolkit) => {
 
             let result: any = (this.container.getNamed(TYPE.Controller, controllerName) as any)[key](req);
 
             if (result && result instanceof Promise) {
                 result.then((value: any) => {
-                    if (value == undefined) {
-                        const response = reply();
-                        response.statusCode = 204;
+                    if (value === undefined) {
+                        return handler.response().code(204);
                     } else {
-                        reply(value);
+                        return value;
                     }
                 })
                 .catch((error: any) => {
-                    return reply(error);
+                    return error;
                 });
 
             } else if (result) {
-                return reply(result);
+                return result;
             }
         };
     }

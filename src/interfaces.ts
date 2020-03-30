@@ -3,7 +3,7 @@ import { interfaces as inversifyInterfaces } from "inversify";
 
 namespace interfaces {
 
-    export type Middleware = (inversifyInterfaces.ServiceIdentifier<any> | hapi.RouteHandler);
+    export type Middleware = (inversifyInterfaces.ServiceIdentifier<any> | hapi.ServerMethod);
 
     export interface ControllerMetadata {
         path: string;
