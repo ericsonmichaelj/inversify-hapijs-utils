@@ -1,5 +1,5 @@
 import * as inversify from "inversify";
-import * as hapi from "@hapi/hapi";
+import * as hapi from "hapi";
 import { interfaces } from "./interfaces";
 import { TYPE, METADATA_KEY } from "./constants";
 

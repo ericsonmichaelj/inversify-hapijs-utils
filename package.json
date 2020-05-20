@@ -1,6 +1,6 @@
 {
   "name": "inversify-hapijs-utils",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Some utilities for the development of hapijs rest applications with Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -47,7 +47,7 @@
     "source-map-support": "0.5.0",
     "supertest": "^3.0.0",
     "tslint": "5.8.0",
-    "typescript": "^2.6.1"
+    "typescript": "^2.9.2"
   },
   "dependencies": {
     "hapi": "^17.8.5",
