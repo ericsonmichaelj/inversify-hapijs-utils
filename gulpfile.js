@@ -89,6 +89,7 @@ gulp.task("build-dts", function() {
         ])
         .pipe(tsDtsProject())
         .on("error", function(err) {
+            console.log(err.message)
             process.exit(1);
         })
         .dts.pipe(gulp.dest("dts"));
