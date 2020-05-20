@@ -1,1 +1,8 @@
 examples
+coverage
+dts
+node_modles
+es
+src/*.js
+src/*.map
+gulpfile.js
