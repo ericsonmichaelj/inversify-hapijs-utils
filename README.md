@@ -22,36 +22,34 @@ To use a class as a "controller" for your hapijs app, simply add the `@Controlle
 The following example will declare a controller that responds to `GET /foo'.
 
 ```ts
-import { Request } from 'hapijs';
 import { Controller, Get, interfaces } from 'inversify-hapijs-utils';
-import { injectable, inject } from 'inversify';
 
-@Controller('/foo')
 @injectable()
+@Controller('/foo')
 export class FooController implements interfaces.Controller {
     
-    constructor( @inject('FooService') private fooService: FooService ) {}
-    
     @Get('/')
-    private index(req: Request): string {
-        return this.fooService.get(req.query.id);
+    private index(): string {
+        return "foo"
     }
 }
 ```
 
 > Note: The controller should not use the hapijs reply method to control output, but rather it should return the result directly. Any errors should return a Boom error.
 
+### Step 2: Create TYPE definition for controller 
+
 The controller also needs to use constant types. Use `Symbol.for("Controller")` to register it as a controller.
 
 ```ts
-const TYPES = {
+const TYPE = {
     Controller: Symbol.for("Controller")
 }
 ```
 
 
 ### Step 3: Configure container and server
-Configure the inversify container in your composition root as usual.
+Configure the inversify container in your composition root as usual. You must also import reflect-metadata
 
 Then, pass the container to the InversifyHapiServer constructor. This will allow it to register all controllers and their dependencies from your container and attach them to the hapi app.
 Then just call server.build() to prepare your app.
@@ -60,6 +58,7 @@ In order for the InversifyHapiServer to find your controllers, you must bind the
 The `Controller` interface exported by inversify-hapijs-utils is empty and solely for convenience, so feel free to implement your own if you want.
 
 ```ts
+import 'reflect-metadata';
 import { Container } from 'inversify';
 import { interfaces, InversifyHapiServer, TYPE } from 'inversify-hapijs-utils';
 
@@ -83,14 +82,6 @@ server
         }
     );
 ```
-
-hapijs ServerOptions can be provided as a second parameter to the InversifyHapiServer constructor:
-
-```let server = new InversifyHapiServer(container, { name: "my-server" });```
-
-hapijs ServerOptions can be extended with `defaultRoot` where one can define a default path that will be prepended to all your controllers:
-
-```let server = new InversifyHapiServer(container, { name: "my-server", defaultRoot: "/v1" });```
 
 ## InversifyHapiServer
 A wrapper for a hapijs Application.
@@ -139,10 +130,12 @@ Middleware can be either an instance of `RequestHandler` or an InversifyJS servi
 The simplest way to use middleware is to define a `RequestHandler` instance and pass that handler as decorator parameter.
 
 ```ts
+import { ReplyNoContinue } from "hapi";
+import * as Boom from "boom";
 // ...
 const loggingHandler = (req: Request, reply: ReplyNoContinue) => {
   console.log(req);
-  return reply.continue();
+  return reply();
 };
 
 const securityHandler = (req: Request, reply: ReplyNoContinue) => {
@@ -151,7 +144,7 @@ const securityHandler = (req: Request, reply: ReplyNoContinue) => {
       return reply(Boom.unauthorized('No esi session id in request header'));
   }
 
-  return reply.continue();
+  return reply();
 };
 
 @Controller('/foo', loggingHandler, securityHandler)
