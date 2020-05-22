@@ -1,6 +1,6 @@
 {
   "name": "inversify-hapijs-utils",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Some utilities for the development of hapijs rest applications with Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -9,6 +9,9 @@
     "test": "gulp",
     "publish-please": "publish-please",
     "prepare": "publish-please guard"
+  },
+  "engines" : { 
+    "node" : ">=12.0.0" 
   },
   "repository": {
     "type": "git",
@@ -50,7 +53,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@hapi/hapi": "^18.4.1",
+    "@hapi/hapi": "^19.1.1",
     "inversify": "^5.0.1"
   }
 }

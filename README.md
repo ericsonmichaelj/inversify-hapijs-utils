@@ -10,18 +10,23 @@ You can install `inversify-hapijs-utils` using npm:
 $ npm install inversify inversify-hapijs-utils reflect-metadata --save
 ```
 
+
 The `inversify-hapijs-utils` type definitions are included in the npm module and require TypeScript 2.0.
 Please refer to the [InversifyJS documentation](https://github.com/inversify/InversifyJS#installation) to learn more about the installation process.
+
+This version requires node 12 or higher.
 
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
 
-| inversify-hapijs-utils | hapi/(@hapi/hapi) |
-| ------ | ------ |
-|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | ^16.6.2 |
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2) | ^17.8.5 |
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 |
+| inversify-hapijs-utils | @hapi/hapi | hapi
+| ------ | ------ | ------ | 
+|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | n/a | ^16.6.2
+| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2)  | n/a | ^17.8.5
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
+
 
 ## The Basics
 
