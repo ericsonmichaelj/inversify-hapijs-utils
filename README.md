@@ -1,6 +1,5 @@
 # inversify-hapijs-utils
 
-Some utilities for the development of hapijs application with Inversify. Based on the inversify-restify.utils. If you're starting writing restful api's then I suggest you use Restify (and the inversify-restify-utils). If you want to use hapi (or you have to) then this project can help you in the same way that inversify-restify.utils does. 
 
 > Note: this project is still a work in progress and does not have any test coverage.
 
@@ -13,6 +12,16 @@ $ npm install inversify inversify-hapijs-utils reflect-metadata --save
 
 The `inversify-hapijs-utils` type definitions are included in the npm module and require TypeScript 2.0.
 Please refer to the [InversifyJS documentation](https://github.com/inversify/InversifyJS#installation) to learn more about the installation process.
+
+## Version Support
+
+The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
+
+| inversify-hapijs-utils | hapi/(@hapi/hapi) |
+| ------ | ------ |
+|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | ^16.6.2 |
+| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2) | ^17.8.5 |
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.0) | ^18.4.1 |
 
 ## The Basics
 
