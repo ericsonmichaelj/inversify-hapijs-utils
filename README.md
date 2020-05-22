@@ -21,7 +21,7 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 | ------ | ------ |
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | ^16.6.2 |
 | [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2) | ^17.8.5 |
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.0) | ^18.4.1 |
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 |
 
 ## The Basics
 
