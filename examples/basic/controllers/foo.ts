@@ -1,14 +1,12 @@
-import { Controller, Get, interfaces } from 'inversify-hapijs-utils';
-import { injectable, inject } from 'inversify';
-import { Request } from 'hapi';
+import { Controller, Get, interfaces } from "inversify-hapijs-utils";
+import { injectable, inject } from "inversify";
+import { Request } from "hapi";
  
-@Controller('/foo')
+@Controller("/foo")
 @injectable()
 export class FooController implements interfaces.Controller {
-    
-    
-    @Get('/')
+    @Get("/")
     private index(): string {
-        return 'foo'
+        return "foo";
     }
 }

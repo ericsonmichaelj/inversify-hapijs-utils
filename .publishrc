@@ -1,5 +1,6 @@
 {
     "validations": {
-        "vulnerableDependencies": false
+        "vulnerableDependencies": false,
+        "branch": "/(master|release\/hapi-v17)/"
     }
 }
