@@ -1,6 +1,6 @@
 {
   "name": "inversify-hapijs-utils",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Some utilities for the development of hapijs rest applications with Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -21,6 +21,10 @@
     "injection"
   ],
   "author": "Andrew Wheeler",
+  "collaborators": [
+    "Andrew Wheeler",
+    "Michael Ericson"
+  ],
   "license": "MIT",
   "bugs": {},
   "devDependencies": {
@@ -34,13 +38,14 @@
     "chai": "^4.1.2",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-install": "^1.1.0",
     "gulp-istanbul": "1.1.2",
     "gulp-mocha": "^3.0.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-tslint": "8.1.2",
     "gulp-typescript": "^3.2.3",
     "mocha": "4.0.1",
-    "publish-please": "2.3.1",
+    "publish-please": "^5.5.1",
     "reflect-metadata": "^0.1.10",
     "run-sequence": "2.2.0",
     "sinon": "^4.1.2",
