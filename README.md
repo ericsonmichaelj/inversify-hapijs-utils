@@ -1,8 +1,17 @@
 # inversify-hapijs-utils
 
-Some utilities for the development of hapijs application with Inversify. Based on the inversify-restify.utils. If you're starting writing restful api's then I suggest you use Restify (and the inversify-restify-utils). If you want to use hapi (or you have to) then this project can help you in the same way that inversify-restify.utils does. 
-
 > Note: this project is still a work in progress and does not have any test coverage.
+
+## Version Support
+
+The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
+
+| inversify-hapijs-utils | @hapi/hapi | hapi
+| ------ | ------ | ------ | 
+|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
+| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -134,35 +143,36 @@ Registers the decorated controller method as a request handler for a particular 
 Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Head`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
 
 ## Middleware
-Middleware can be either an instance of `RequestHandler` or an InversifyJS service identifier. This is attached as a route 'pre' method. To stop processing you will need to return a Boom error or a javascript Error.
+Middleware can be either an instance of `RequestHandler` or an InversifyJS service identifier. To stop processing you will need to return a Boom error or a javascript Error.
 
-The simplest way to use middleware is to define a `RequestHandler` instance and pass that handler as decorator parameter.
+The simplest way to use middleware is to define a `RequestHandler` instance and pass that handler as decorator parameter. You must return a value. If it is a side-effect, than you can return `null`;
 
 ```ts
 // ...
-const loggingHandler = (req: Request, reply: ReplyNoContinue) => {
+import { ReplyNoContinue } from "hapi";
+import * as Boom from "boom";
+
+const loggingHandler = (req: Request) => {
   console.log(req);
-  return reply.continue();
+  return null;
 };
 
-const securityHandler = (req: Request, reply: ReplyNoContinue) => {
+const securityHandler = (req: Request) => {
   // Return a Boom (or any Error) if you want processing to stop
   if (!req.headers['token']) {
-      return reply(Boom.unauthorized('No esi session id in request header'));
+      return Boom.unauthorized('No session id in request header');
   }
 
-  return reply.continue();
+  return null;
 };
 
 @Controller('/foo', loggingHandler, securityHandler)
 @injectable()
 export class FooController {
     
-    constructor( @inject('FooService') private fooService: FooService ) {}
-    
     @Get('/', loggingHandler)
     private index(req: Request): string {
-        return this.fooService.get(req.query.id);
+        return 'foo'
     }
 }
 ```
@@ -173,20 +183,19 @@ But if you wish to take full advantage of InversifyJS you can bind the same hand
 // ...
 import { TYPES } from 'types';
 // ...
-const loggingHandler = (req: Request, reply: ReplyNoContinue) => {
+const loggingHandler = (req: Request) => {
   console.log(req);
+  return null;
 };
 container.bind<RequestHandler>(TYPES.LoggingMiddleware).toConstantValue(loggingHandler);
 // ...
 @Controller('/foo', TYPES.LoggingMiddleware)
 @injectable()
 export class FooController implements interfaces.Controller {
-    
-    constructor( @inject('FooService') private fooService: FooService ) {}
-    
+   
     @Get('/', TYPES.LoggingMiddleware)
     private index(req: Request): string {
-        return this.fooService.get(req.query.id);
+        return 'foo'
     }
 }
 ```
@@ -195,6 +204,17 @@ export class FooController implements interfaces.Controller {
 HapiJs supports Boom objects.
 
 ```ts
+// ...
+const TYPES = {
+  Controller: Symbol.for("Controller"),
+  FooService: "FooService",
+  loggingMiddleware: Symbol.for("loggingMiddleware")
+};
+// ...
+import { Request } from "hapi";
+import { injectable, inject } from "inversify";
+import * as Boom from "boom";
+
 @Controller('/foo', TYPES.LoggingMiddleware)
 @injectable()
 export class FooController implements interfaces.Controller {
@@ -210,3 +230,9 @@ export class FooController implements interfaces.Controller {
     }
 }
 ```
+
+## Support and Contributing
+
+If you have any questions or issues using inversify-hapijs-utils please post your issues [here](https://github.com/ericsonmichaelj/inversify-hapijs-utils/issues):
+
+If you want to contribute, create a PR in the [repository](https://github.com/ericsonmichaelj/inversify-hapijs-utils)
