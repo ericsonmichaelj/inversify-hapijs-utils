@@ -9,9 +9,9 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 | inversify-hapijs-utils | @hapi/hapi | hapi
 | ------ | ------ | ------ | 
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
+| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.1.0)  | n/a | ^17.8.5
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.1.0) | ^18.4.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.1.0) | ^19.1.1 | n/a
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -50,16 +50,7 @@ export class FooController implements interfaces.Controller {
 
 > Note: The controller should not use the hapijs reply method to control output, but rather it should return the result directly. Any errors should return a Boom error.
 
-The controller also needs to use constant types. Use `Symbol.for("Controller")` to register it as a controller.
-
-```ts
-const TYPES = {
-    Controller: Symbol.for("Controller")
-}
-```
-
-
-### Step 3: Configure container and server
+### Step 2: Configure container and server
 Configure the inversify container in your composition root as usual.
 
 Then, pass the container to the InversifyHapiServer constructor. This will allow it to register all controllers and their dependencies from your container and attach them to the hapi app.
@@ -82,24 +73,12 @@ container.bind<FooService>('FooService').to(FooService);
 // create server
 let server = new InversifyHapiServer(container);
 
+
 server
     .build()
-    .start(
-        (err) => {
-            if (err) {
-                console.log(err);
-            }
-        }
-    );
+    .start();
 ```
 
-hapijs ServerOptions can be provided as a second parameter to the InversifyHapiServer constructor:
-
-```let server = new InversifyHapiServer(container, { name: "my-server" });```
-
-hapijs ServerOptions can be extended with `defaultRoot` where one can define a default path that will be prepended to all your controllers:
-
-```let server = new InversifyHapiServer(container, { name: "my-server", defaultRoot: "/v1" });```
 
 ## InversifyHapiServer
 A wrapper for a hapijs Application.
@@ -108,11 +87,12 @@ A wrapper for a hapijs Application.
 Optional - exposes the hapijs application object for convenient loading of server-level middleware.
 
 ```ts
-import * as morgan from 'morgan';
 // ...
 let server = new InversifyHapiServer(container);
-server.setConfig((app) => {
-    app.connection({port: 8080});
+server.setConfig(async(app) => {
+    await app.register({
+        plugin: require("hapi-pino")
+    });
 });
 ```
 
@@ -121,11 +101,20 @@ Attaches all registered controllers and middleware to the hapijs application. Re
 
 ```ts
 // ...
-let server = new InversifyHapiServer(container);
-server
-    .setConfig(configFn)
-    .build()
-    .start(err => {});
+let server = new InversifyHapiServer(container, {port: 8080});
+
+server.setConfig(async(app) => {
+    await app.register({
+        plugin: require("hapi-pino")
+    });
+});
+
+const init = async() => {
+    const serverInstance = await server.buildAsync();
+    serverInstance.start();
+}
+
+init();
 ```
 
 ## Decorators

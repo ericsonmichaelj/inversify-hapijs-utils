@@ -49,15 +49,21 @@ export class InversifyHapiServer {
     /**
      * Applies all routes and configuration to the server, returning the hapi application.
      */
-    public build(): hapi.Server {
+    public build(): Promise<hapi.Server> | hapi.Server {
         // register server-level middleware before anything else
         if (this.configFn) {
-            this.configFn.apply(undefined, [this.app]);
+            const response = this.configFn.apply(undefined, [this.app]);
+            if (response instanceof Promise) {
+                return response.then(() => {
+                    this.registerControllers();
+                    return this.app;
+                });
+            }
         }
         this.registerControllers();
-
         return this.app;
     }
+
 
     private registerControllers() {
 

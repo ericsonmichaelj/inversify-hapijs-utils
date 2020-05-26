@@ -1,7 +1,6 @@
-const TYPES = {
-  Controller: Symbol.for("Controller"),
+const CONSTANTS = {
   FooService: "FooService",
   loggingMiddleware: Symbol.for("loggingMiddleware")
 };
 
-export default TYPES;
+export default CONSTANTS;
