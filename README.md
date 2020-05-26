@@ -10,8 +10,8 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 | ------ | ------ | ------ | 
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
 | [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.2) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.1.0) | ^18.4.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.1.0) | ^19.1.1 | n/a
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -23,15 +23,7 @@ $ npm install inversify inversify-hapijs-utils reflect-metadata --save
 The `inversify-hapijs-utils` type definitions are included in the npm module and require TypeScript 2.0.
 Please refer to the [InversifyJS documentation](https://github.com/inversify/InversifyJS#installation) to learn more about the installation process.
 
-## Version Support
-
-The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
-
-| inversify-hapijs-utils | hapi/(@hapi/hapi) |
-| ------ | ------ |
-|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | ^16.6.2 |
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2) | ^17.8.5 |
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 |
+This version requires node 12 or higher.
 
 ## The Basics
 
@@ -92,15 +84,10 @@ container.bind<FooService>('FooService').to(FooService);
 // create server
 let server = new InversifyHapiServer(container, {port: 8080});
 
+
 server
     .build()
-    .start(
-        (err) => {
-            if (err) {
-                console.log(err);
-            }
-        }
-    );
+    .start();
 ```
 
 ## InversifyHapiServer
@@ -112,11 +99,20 @@ Attaches all registered controllers and middleware to the hapijs application. Re
 
 ```ts
 // ...
-let server = new InversifyHapiServer(container);
-server
-    .setConfig(configFn)
-    .build()
-    .start(err => {});
+let server = new InversifyHapiServer(container, {port: 8080});
+
+server.setConfig(async(app) => {
+    await app.register({
+        plugin: require("hapi-pino")
+    });
+});
+
+const init = async() => {
+    const serverInstance = await server.build();
+    serverInstance.start();
+}
+
+init();
 ```
 
 ## Decorators

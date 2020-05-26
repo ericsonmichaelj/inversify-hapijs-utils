@@ -52,10 +52,14 @@ export class InversifyHapiServer {
     public build(): hapi.Server {
         // register server-level middleware before anything else
         if (this.configFn) {
-            this.configFn.apply(undefined, [this.app]);
+            const response = this.configFn.apply(undefined, [this.app]);
+            if (response instanceof Promise) {
+                response.then(() => {
+                    this.registerControllers();
+                    return this.app;
+                });
+            }
         }
-        this.registerControllers();
-
         return this.app;
     }
 
