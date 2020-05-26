@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/hapi": "^17.8.8",
-    "hapi": "^17.8.5",
+    "hapi-pino": "^8.0.1",
     "inversify": "^5.0.1",
     "inversify-hapijs-utils": "file:../..",
     "reflect-metadata": "^0.1.13",
