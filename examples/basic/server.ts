@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { Container } from "inversify";
-import { InversifyHapiServer } from "inversify-hapijs-utils";
-import TYPE from "./constants/type"
+import { InversifyHapiServer, TYPE } from "inversify-hapijs-utils";
 import { interfaces } from "inversify-hapijs-utils";
 import { FooController } from "./controllers/foo";
 import { inherits } from "util";

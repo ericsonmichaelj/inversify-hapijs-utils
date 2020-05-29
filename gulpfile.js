@@ -166,6 +166,12 @@ gulp.task("build", function(cb) {
         cb);
 });
 
+gulp.task("buildAndClean", function(cb) {
+    runSequence(
+        ["clean","build", cb]
+    )
+});
+
 //******************************************************************************
 //* DEFAULT
 //******************************************************************************
@@ -175,4 +181,8 @@ gulp.task("default", function(cb) {
         "build",
         "test",
         cb);
+});
+
+gulp.task("watch", function() {
+    gulp.watch("src/*.ts", ["buildAndClean"])
 });
