@@ -10,7 +10,8 @@ var gulp = require("gulp"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del');
+    del = require('del'),
+    watch = require('gulp-watch');
 
 //******************************************************************************
 //* CLEAN
@@ -175,4 +176,15 @@ gulp.task("default", function(cb) {
         "build",
         "test",
         cb);
+});
+
+gulp.task("cleanAndBuild", function(cb) {
+    runSequence(
+        "clean",
+        "build",
+        cb);
+})
+
+gulp.task("watch", function() {
+    gulp.watch('src/*.ts', ['cleanAndBuild'])
 });

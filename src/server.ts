@@ -54,11 +54,15 @@ export class InversifyHapiServer {
         if (this.configFn) {
             const response = this.configFn.apply(undefined, [this.app]);
             if (response instanceof Promise) {
-                response.then(() => {
+                return response.then(() => {
                     this.registerControllers();
                     return this.app;
                 });
+            } else {
+                this.registerControllers();
             }
+        } else {
+            this.registerControllers();
         }
         return this.app;
     }
