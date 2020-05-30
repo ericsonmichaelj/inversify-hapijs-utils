@@ -9,7 +9,7 @@ import * as Boom from "boom";
 @injectable()
 export class FooController implements interfaces.Controller {
     constructor(@inject("FooService") private fooService: FooService ) {}
-    @Get("/")
+    @Get("/", securityHandler)
     private index(): string {
         return "foo";
     }

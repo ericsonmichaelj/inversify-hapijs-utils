@@ -2,5 +2,6 @@
     "validations": {
         "vulnerableDependencies": false,
         "branch": "/(master|release\/hapi-v16)/"
-    }
+    },
+    "publishTag": "lts-hapi16"
 }

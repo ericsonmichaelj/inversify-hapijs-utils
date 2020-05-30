@@ -49,10 +49,10 @@ export class InversifyHapiServer {
     /**
      * Applies all routes and configuration to the server, returning the hapi application.
      */
-    public build(): hapi.Server {
+    public build(callback: (err: Error, app: any) => void | null): hapi.Server {
         // register server-level middleware before anything else
         if (this.configFn) {
-            this.configFn.apply(undefined, [this.app]);
+            this.configFn.apply(undefined, [this.app, (err: Error) => callback(err, this.app)]);
         } else {
             this.app.connection({port: 8080});
         }

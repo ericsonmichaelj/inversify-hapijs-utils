@@ -29,7 +29,7 @@ namespace interfaces {
     }
 
     export interface ConfigFunction {
-        (app: hapi.Server): void;
+        (app: hapi.Server, callback?: (error: Error) => void): void;
     }
 
     export interface ServerOptions extends hapi.ServerOptions {

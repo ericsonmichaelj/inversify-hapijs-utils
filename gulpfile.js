@@ -158,12 +158,19 @@ gulp.task("test", function(cb) {
     runSequence("istanbul:hook", "mocha", cb);
 });
 
+gulp.task("cleanAndbuild", function(cb) {
+    runSequence(
+        ["clean", "build"],
+        cb);
+});
+
 gulp.task("build", function(cb) {
     runSequence(
         ["build-src", "build-es", "build-lib", "build-dts"], // tests + build es and lib
         "build-test",
         cb);
 });
+
 
 //******************************************************************************
 //* DEFAULT
@@ -174,4 +181,8 @@ gulp.task("default", function(cb) {
         "build",
         "test",
         cb);
+});
+
+gulp.task("watch", function() {
+    gulp.watch("src/*.ts", ["cleanAndbuild"])
 });

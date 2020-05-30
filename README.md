@@ -46,18 +46,7 @@ export class FooController implements interfaces.Controller {
 
 > Note: The controller should not use the hapijs reply method to control output, but rather it should return the result directly. Any errors should return a Boom error.
 
-### Step 2: Create TYPE definition for controller 
-
-The controller also needs to use constant types. Use `Symbol.for("Controller")` to register it as a controller.
-
-```ts
-const TYPE = {
-    Controller: Symbol.for("Controller")
-}
-```
-
-
-### Step 3: Configure container and server
+### Step 2: Configure container and server
 Configure the inversify container in your composition root as usual. You must also import reflect-metadata
 
 Then, pass the container to the InversifyHapiServer constructor. This will allow it to register all controllers and their dependencies from your container and attach them to the hapi app.
@@ -102,9 +91,27 @@ Optional - exposes the hapijs application object for convenient loading of serve
 import * as morgan from 'morgan';
 // ...
 let server = new InversifyHapiServer(container);
-server.setConfig((app) => {
-    app.connection({port: 8080});
+
+server.setConfig((app, fn) => {
+  app.connection({port: 8080});
+  app.register(require("hapi-pino"), fn);
 });
+
+const callback = (err: Error, app: any) => {
+    if (err) {
+        process.exit(1);
+    }
+    // Start the server
+    app.start((error: Error) => {
+        if (error) {
+            console.error(error);
+            process.exit(1);
+        }
+    })
+};
+ server
+    .build(callback);
+
 ```
 
 ### `.build()`
@@ -118,6 +125,20 @@ server
     .build()
     .start(err => {});
 ```
+
+If setConfig uses a configuration that requires a callback, start the server as:
+```ts
+// ...
+let server = new InversifyHapiServer(container);
+const callback = (err: Error, app: any) => {
+    app.start();
+}
+server
+    .setConfig(configFn)
+ server
+    .build(callback);
+```
+
 
 ## Decorators
 
