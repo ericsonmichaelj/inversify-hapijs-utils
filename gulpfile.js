@@ -10,7 +10,7 @@ var gulp = require("gulp"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del');
+    del = require('del')
 
 //******************************************************************************
 //* CLEAN
@@ -139,7 +139,7 @@ gulp.task("build-test", function() {
 gulp.task("mocha", function() {
     return gulp.src([
             "node_modules/reflect-metadata/Reflect.js",
-            "test/**/*.test.js"
+            "test/**/*.spec.js"
         ])
         .pipe(mocha({
             ui: "bdd"
