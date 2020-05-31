@@ -4,9 +4,9 @@ import { InversifyHapiServer, TYPE } from "inversify-hapijs-utils";
 import CONSTANTS from "./constants/type";
 import { interfaces } from "inversify-hapijs-utils";
 import { FooController, BarController, BazController } from "./controllers";
-import { loggingHandler } from "./middleware";
+import { loggingHandler, securityHandler } from "./middleware";
 import { FooService } from "./interfaces";
-import { FooServiceImpl } from "./services";
+import { FooServiceImpl } from "../services";
 // // set up container
 let container = new Container();
 container.bind<FooService>(CONSTANTS.FooService).to(FooServiceImpl);
@@ -17,11 +17,14 @@ container.bind<interfaces.Controller>(TYPE.Controller).to(BazController).whenTar
 
 container.bind(CONSTANTS.loggingMiddleware).toConstantValue(loggingHandler);
 
+container.bind(CONSTANTS.securityMiddleware).toConstantValue(securityHandler);
+
+
 // // create server
 let server = new InversifyHapiServer(container, {port: 8080});
 console.log(TYPE.Controller);
 console.log(container.getAll(TYPE.Controller));
 
-server
-    .build()
-    .start();
+export default server.build();
+
+

@@ -10,8 +10,7 @@ var gulp = require("gulp"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del'),
-    watch = require('gulp-watch');
+    del = require('del');
 
 //******************************************************************************
 //* CLEAN
