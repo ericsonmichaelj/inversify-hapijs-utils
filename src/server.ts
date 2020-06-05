@@ -49,10 +49,14 @@ export class InversifyHapiServer {
     /**
      * Applies all routes and configuration to the server, returning the hapi application.
      */
-    public build(callback: (err: Error, app: any) => void | null): hapi.Server {
+    public build(callback?: (err: Error, app: any) => void | null): hapi.Server {
         // register server-level middleware before anything else
         if (this.configFn) {
-            this.configFn.apply(undefined, [this.app, (err: Error) => callback(err, this.app)]);
+            if (callback) {
+                this.configFn.apply(undefined, [this.app, (err: Error) => callback(err, this.app)]);
+            } else {
+                this.configFn.apply(undefined, [this.app]);
+            }
         } else {
             this.app.connection({port: 8080});
         }
@@ -73,10 +77,8 @@ export class InversifyHapiServer {
                 controller.constructor
             );
 
-            if (this.defaultRoot !== null && typeof controllerMetadata.path === "string") {
+            if (this.defaultRoot !== null) {
                 controllerMetadata.path = this.defaultRoot + controllerMetadata.path;
-            } else if (this.defaultRoot !== null) {
-                controllerMetadata.path = this.defaultRoot;
             }
 
             let methodMetadata: interfaces.ControllerMethodMetadata[] = Reflect.getOwnMetadata(
@@ -84,30 +86,25 @@ export class InversifyHapiServer {
                 controller.constructor
             );
 
-            if (controllerMetadata && methodMetadata) {
-                let controllerMiddleware = this.resolveMiddleware(...controllerMetadata.middleware);
+            let controllerMiddleware = this.resolveMiddleware(...controllerMetadata.middleware);
 
-                methodMetadata.forEach((metadata: interfaces.ControllerMethodMetadata) => {
-                    let handler: hapi.RouteHandler = this.handlerFactory(controllerMetadata.target.name, metadata.key);
-                    let routeOptions: any = typeof metadata.options === "string" ? { path: metadata.options } : metadata.options;
-                    let routeMiddleware = this.resolveMiddleware(...metadata.middleware);
+            methodMetadata.forEach((metadata: interfaces.ControllerMethodMetadata) => {
+                let handler: hapi.RouteHandler = this.handlerFactory(controllerMetadata.target.name, metadata.key);
+                let routeOptions: any = typeof metadata.options === "string" ? { path: metadata.options } : metadata.options;
+                let routeMiddleware = this.resolveMiddleware(...metadata.middleware);
 
-                    if (typeof routeOptions.path === "string" && typeof controllerMetadata.path === "string" && controllerMetadata.path !== "/") {
-                        routeOptions.path = controllerMetadata.path + routeOptions.path;
-                    } else if (routeOptions.path instanceof RegExp && controllerMetadata.path !== "/") {
-                        routeOptions.path = new RegExp(controllerMetadata.path + routeOptions.path.source);
-                    }
-
-                    this.app.route({
-                        config: {
-                            pre: [...controllerMiddleware, ...routeMiddleware]
-                        },
-                        handler: handler,
-                        method: metadata.method.toUpperCase() as hapi.HTTP_METHODS_PARTIAL,
-                        path: routeOptions.path
-                    });
+                if (controllerMetadata.path !== "/") {
+                    routeOptions.path = controllerMetadata.path + routeOptions.path;
+                }
+                this.app.route({
+                    config: {
+                        pre: [...controllerMiddleware, ...routeMiddleware]
+                    },
+                    handler: handler,
+                    method: metadata.method.toUpperCase() as hapi.HTTP_METHODS_PARTIAL,
+                    path: routeOptions.path
                 });
-            }
+            });
         });
     }
 
@@ -127,7 +124,7 @@ export class InversifyHapiServer {
             let result: any = (this.container.getNamed(TYPE.Controller, controllerName) as any)[key](req);
 
             if (result && result instanceof Promise) {
-                result.then((value: any) => {
+                return result.then((value: any) => {
                     if (value == undefined) {
                         const response = reply();
                         response.statusCode = 204;
@@ -142,6 +139,7 @@ export class InversifyHapiServer {
             } else if (result) {
                 return reply(result);
             }
+            return reply()
         };
     }
 

@@ -6,7 +6,7 @@ import { interfaces } from "inversify-hapijs-utils";
 import { FooController } from "./controllers/foo";
 // // set up container
 let container = new Container();
-container.bind<interfaces.Controller>(TYPE.Controller).to(FooController).whenTargetNamed("FooController")
+container.bind<interfaces.Controller>(TYPE.Controller).to(FooController).whenTargetNamed("FooController");
 console.log(TYPE.Controller);
 console.log(container.getAll(TYPE.Controller));
 
@@ -35,8 +35,12 @@ const callback = (err: Error, app: any) => {
 };
 
 server.setConfig((app, fn) => {
-  app.connection({port: 8080});
-  app.register(require("hapi-pino"), fn);
+    app.connection({port: 8080});
+    if (fn) {
+        app.register(require("hapi-pino"), fn);
+    } else {
+        app.register(require("hapi-pino"));
+    }
 });
 
 
