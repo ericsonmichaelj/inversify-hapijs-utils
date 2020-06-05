@@ -1,7 +1,5 @@
 # inversify-hapijs-utils
 
-> Note: this project is still a work in progress and does not have any test coverage.
-
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
@@ -9,9 +7,15 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 | inversify-hapijs-utils | @hapi/hapi | hapi
 | ------ | ------ | ------ | 
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
+<<<<<<< HEAD
 | [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.1.0)  | n/a | ^17.8.5
 | [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.1.0) | ^18.4.1 | n/a
 | [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.1.0) | ^19.1.1 | n/a
+=======
+| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
+| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.2.0) | ^18.4.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.2.0) | ^19.1.1 | n/a
+>>>>>>> 9dd37f1... Add tests into build
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -47,8 +51,6 @@ export class FooController implements interfaces.Controller {
     }
 }
 ```
-
-> Note: The controller should not use the hapijs reply method to control output, but rather it should return the result directly. Any errors should return a Boom error.
 
 ### Step 2: Configure container and server
 Configure the inversify container in your composition root as usual.
@@ -129,7 +131,7 @@ Registers the decorated controller method as a request handler for a particular 
 
 ### `@SHORTCUT(path, [middleware, ...])`
 
-Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Head`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
+Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
 
 ## Middleware
 Middleware can be either an instance of `RequestHandler` or an InversifyJS service identifier. To stop processing you will need to return a Boom error or a javascript Error.

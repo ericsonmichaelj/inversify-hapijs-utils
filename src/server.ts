@@ -76,42 +76,34 @@ export class InversifyHapiServer {
                 controller.constructor
             );
 
-            if (this.defaultRoot !== null && typeof controllerMetadata.path === "string") {
+            if (this.defaultRoot !== null) {
                 controllerMetadata.path = this.defaultRoot + controllerMetadata.path;
-            } else if (this.defaultRoot !== null) {
-                controllerMetadata.path = this.defaultRoot;
             }
-
             let methodMetadata: interfaces.ControllerMethodMetadata[] = Reflect.getOwnMetadata(
                 METADATA_KEY.controllerMethod,
                 controller.constructor
             );
 
-            if (controllerMetadata && methodMetadata) {
-                let controllerMiddleware = this.resolveMiddleware(...controllerMetadata.middleware);
+            let controllerMiddleware = this.resolveMiddleware(...controllerMetadata.middleware);
 
-                methodMetadata.forEach((metadata: interfaces.ControllerMethodMetadata) => {
-                    let handler: hapi.ServerMethod = this.handlerFactory(controllerMetadata.target.name, metadata.key);
-                    let routeOptions: any = typeof metadata.options === "string" ? { path: metadata.options } : metadata.options;
-                    let routeMiddleware = this.resolveMiddleware(...metadata.middleware);
+            methodMetadata.forEach((metadata: interfaces.ControllerMethodMetadata) => {
+                let handler: hapi.ServerMethod = this.handlerFactory(controllerMetadata.target.name, metadata.key);
+                let routeOptions: any = typeof metadata.options === "string" ? { path: metadata.options } : metadata.options;
+                let routeMiddleware = this.resolveMiddleware(...metadata.middleware);
 
-                    if (typeof routeOptions.path === "string" && 
-                    typeof controllerMetadata.path === "string" && controllerMetadata.path !== "/") {
-                        routeOptions.path = controllerMetadata.path + routeOptions.path;
-                    } else if (routeOptions.path instanceof RegExp && controllerMetadata.path !== "/") {
-                        routeOptions.path = new RegExp(controllerMetadata.path + routeOptions.path.source);
-                    }
+                if (controllerMetadata.path !== "/") {
+                    routeOptions.path = controllerMetadata.path + routeOptions.path;
+                }
 
-                    this.app.route({
-                        handler,
-                        method: metadata.method.toUpperCase() as hapi.Util.HTTP_METHODS_PARTIAL,
-                        options: {
-                            pre: [...controllerMiddleware, ...routeMiddleware]
-                        },
-                        path: routeOptions.path
-                    });
+                this.app.route({
+                    handler,
+                    method: metadata.method.toUpperCase() as hapi.Util.HTTP_METHODS_PARTIAL,
+                    options: {
+                        pre: [...controllerMiddleware, ...routeMiddleware]
+                    },
+                    path: routeOptions.path
                 });
-            }
+            });
         });
     }
 
@@ -131,7 +123,7 @@ export class InversifyHapiServer {
             let result: any = (this.container.getNamed(TYPE.Controller, controllerName) as any)[key](req);
 
             if (result && result instanceof Promise) {
-                result.then((value: any) => {
+                return result.then((value: any) => {
                     if (value === undefined) {
                         return handler.response().code(204);
                     } else {
@@ -145,6 +137,7 @@ export class InversifyHapiServer {
             } else if (result) {
                 return result;
             }
+            return null;
         };
     }
 

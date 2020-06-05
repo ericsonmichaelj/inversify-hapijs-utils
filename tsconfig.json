@@ -11,9 +11,9 @@
         "emitDecoratorMetadata": true,
 		"removeComments": true,
         "noImplicitAny": false,
-        "noUnusedLocals": true,
+        "noUnusedLocals": false,
         "strictNullChecks": true,
-        "rootDir": "./src"        
+        "rootDir": "./src"
     },
     "compileOnSave": false,
 	"exclude": [

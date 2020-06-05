@@ -24,16 +24,12 @@ export function Patch(options: interfaces.RouteOptions, ...middleware: interface
     return Method("patch", options, ...middleware);
 }
 
-export function Head(options: interfaces.RouteOptions, ...middleware: interfaces.Middleware[]): interfaces.HandlerDecorator {
-    return Method("head", options, ...middleware);
-}
-
 export function Delete(options: interfaces.RouteOptions, ...middleware: interfaces.Middleware[]): interfaces.HandlerDecorator {
     return Method("delete", options, ...middleware);
 }
 
 export function Options(options: interfaces.RouteOptions, ...middleware: interfaces.Middleware[]): interfaces.HandlerDecorator {
-    return Method("opts", options, ...middleware);
+    return Method("options", options, ...middleware);
 }
 
 export function Method(
