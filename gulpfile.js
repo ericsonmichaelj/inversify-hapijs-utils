@@ -18,9 +18,8 @@ var gulp = require("gulp"),
 gulp.task("clean", function () {
     return del([
         "src/**/*.js",
-        "test/**/*.test.js",
         "src/*.js",
-        "test/*.test.js",
+        "test/*.spec.js",
         "lib",
         "es",
         "amd"
@@ -139,7 +138,7 @@ gulp.task("build-test", function() {
 gulp.task("mocha", function() {
     return gulp.src([
             "node_modules/reflect-metadata/Reflect.js",
-            "test/**/*.test.js"
+            "test/*.spec.js"
         ])
         .pipe(mocha({
             ui: "bdd"

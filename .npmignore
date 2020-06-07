@@ -4,5 +4,6 @@ node_modles
 es
 src/*.js
 src/*.map
+test
 gulpfile.js
 build.sh
