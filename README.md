@@ -1,7 +1,5 @@
 # inversify-hapijs-utils
 
-> Note: this project is still a work in progress and does not have any test coverage.
-
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
@@ -11,7 +9,7 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
 | [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
 | [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.2) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.1) | ^19.1.1 | n/a
+| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.1.0) | ^19.1.1 | n/a
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -25,18 +23,6 @@ The `inversify-hapijs-utils` type definitions are included in the npm module and
 Please refer to the [InversifyJS documentation](https://github.com/inversify/InversifyJS#installation) to learn more about the installation process.
 
 This version requires node 12 or higher.
-
-## Version Support
-
-The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
-
-| inversify-hapijs-utils | @hapi/hapi | hapi
-| ------ | ------ | ------ | 
-|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.4) | n/a | ^16.6.2
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
-
 
 ## The Basics
 
@@ -63,18 +49,7 @@ export class FooController implements interfaces.Controller {
 
 > Note: The controller should not use the hapijs reply method to control output, but rather it should return the result directly. Any errors should return a Boom error.
 
-### Step 2: Add the controller as a constant type
-
-The controller also needs to use constant types. Use `Symbol.for("Controller")` to register it as a controller.
-
-```ts
-const TYPES = {
-    Controller: Symbol.for("Controller")
-}
-```
-
-
-### Step 3: Configure container and server
+### Step 2: Configure container and server
 Configure the inversify container in your composition root as usual.
 
 Then, pass the container to the InversifyHapiServer constructor. This will allow it to register all controllers and their dependencies from your container and attach them to the hapi app.
@@ -97,15 +72,10 @@ container.bind<FooService>('FooService').to(FooService);
 // create server
 let server = new InversifyHapiServer(container, {port: 8080});
 
+
 server
     .build()
-    .start(
-        (err) => {
-            if (err) {
-                console.log(err);
-            }
-        }
-    );
+    .start();
 ```
 
 ## InversifyHapiServer
@@ -117,11 +87,20 @@ Attaches all registered controllers and middleware to the hapijs application. Re
 
 ```ts
 // ...
-let server = new InversifyHapiServer(container);
-server
-    .setConfig(configFn)
-    .build()
-    .start(err => {});
+let server = new InversifyHapiServer(container, {port: 8080});
+
+server.setConfig(async(app) => {
+    await app.register({
+        plugin: require("hapi-pino")
+    });
+});
+
+const init = async() => {
+    const serverInstance = await server.build();
+    serverInstance.start();
+}
+
+init();
 ```
 
 ## Decorators
@@ -136,7 +115,7 @@ Registers the decorated controller method as a request handler for a particular 
 
 ### `@SHORTCUT(path, [middleware, ...])`
 
-Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Head`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
+Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
 
 ## Middleware
 Middleware can be either an instance of `RequestHandler` or an InversifyJS service identifier. To stop processing you will need to return a Boom error or a javascript Error.

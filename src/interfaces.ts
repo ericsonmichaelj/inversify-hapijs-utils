@@ -11,8 +11,8 @@ namespace interfaces {
         target: any;
     }
 
-    export type StrOrRegex = string | RegExp;
-    export type RouteOptions = StrOrRegex | { path: StrOrRegex  } | { options: Object, path: StrOrRegex } & Object;
+    export type StrOrRegex = string;
+    export type RouteOptions = StrOrRegex | { path: StrOrRegex  };
 
     export interface ControllerMethodMetadata {
         options: RouteOptions;

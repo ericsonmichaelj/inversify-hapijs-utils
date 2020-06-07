@@ -6,4 +6,6 @@ es
 src/*.js
 src/*.map
 gulpfile.js
-© 2020 GitHub, Inc.
+build.sh
+.nyc_output
+test

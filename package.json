@@ -1,12 +1,12 @@
 {
   "name": "inversify-hapijs-utils",
-  "version": "3.0.1",
+  "version": "3.1.1",
   "description": "Some utilities for the development of hapijs rest applications with Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "typings": "./dts/index.d.ts",
   "scripts": {
-    "test": "gulp",
+    "test": "nyc mocha -r ts-node/register test/**/*.ts",
     "publish-please": "publish-please",
     "prepare": "publish-please guard"
   },
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrewwh/inversify-hapijs-utils.git"
+    "url": "git+https://github.com/ericsonmichaelj/inversify-hapijs-utils.git"
   },
   "keywords": [
     "InversifyJS",
@@ -34,24 +34,24 @@
     "@types/chai": "4.0.5",
     "@types/hapi": "^17.8.5",
     "@types/inversify": "^2.0.33",
-    "@types/mocha": "2.2.44",
+    "@types/mocha": "^2.2.48",
     "@types/node": "8.0.53",
     "@types/sinon": "4.0.0",
     "@types/supertest": "2.0.3",
     "chai": "^4.1.2",
     "del": "^3.0.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-install": "^1.1.0",
     "gulp-istanbul": "1.1.2",
     "gulp-mocha": "^3.0.1",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-tslint": "8.1.2",
-    "gulp-typescript": "^3.2.3",
-    "mocha": "4.0.1",
+    "gulp-typescript": "^3.2.4",
+    "hapi-pino": "^8.0.1",
+    "nyc": "^15.0.1",
     "publish-please": "^5.5.1",
     "reflect-metadata": "^0.1.10",
-    "run-sequence": "2.2.0",
-    "sinon": "^4.1.2",
+    "sinon": "^4.5.0",
     "source-map-support": "0.5.0",
     "supertest": "^3.0.0",
     "tslint": "5.8.0",
@@ -59,6 +59,13 @@
   },
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
-    "inversify": "^5.0.1"
+    "inversify": "^5.0.1",
+    "mocha": "^7.2.0"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.ts",
+      "examples"
+    ]
   }
 }

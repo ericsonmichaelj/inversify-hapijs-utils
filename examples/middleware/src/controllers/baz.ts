@@ -6,7 +6,7 @@ import TYPES from "../constants/type";
 @injectable()
 @Controller("/baz")
 export class BazController implements interfaces.Controller {
-    @Get("/logging", TYPES.loggingMiddleware)
+    @Get("/secure", TYPES.securityMiddleware)
     public indexLogged(): string {
         return "baz";
     }

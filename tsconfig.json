@@ -11,12 +11,13 @@
         "emitDecoratorMetadata": true,
 		"removeComments": true,
         "noImplicitAny": false,
-        "noUnusedLocals": true,
+        "noUnusedLocals": false,
         "strictNullChecks": true,
         "rootDir": "./src"        
     },
     "compileOnSave": false,
 	"exclude": [
-		"node_modules"
+        "node_modules",
+        "**/*.spec.ts"
 	]    
 }

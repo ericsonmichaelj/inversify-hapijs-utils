@@ -4,19 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --no-lazy -r ts-node/register server.ts"
+    "test": "nyc mocha -r ts-node/register test/**/*.spec.ts",
+    "start": "node --no-lazy -r ts-node/register ./src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/hapi": "^17.8.8",
-    "hapi": "^17.8.5",
+    "hapi-pino": "^8.0.1",
     "inversify": "^5.0.1",
     "inversify-hapijs-utils": "file:../..",
     "reflect-metadata": "^0.1.13",
+    "supertest": "^4.0.2",
     "typescript": "^2.9.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^7.2.0",
+    "nyc": "^15.0.1"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.ts"
+    ]
+  }
 }
