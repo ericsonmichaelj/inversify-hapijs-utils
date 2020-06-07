@@ -7,3 +7,5 @@ src/*.js
 src/*.map
 gulpfile.js
 build.sh
+.nyc_output
+test

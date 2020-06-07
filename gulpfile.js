@@ -1,16 +1,11 @@
-"use strict";
-
-//******************************************************************************
-//* DEPENDENCIES
-//******************************************************************************
-var gulp = require("gulp"),
+const gulp = require("gulp"),
     tslint = require("gulp-tslint"),
     tsc = require("gulp-typescript"),
-    runSequence = require("run-sequence"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del');
+    del = require('del')
+
 
 //******************************************************************************
 //* CLEAN
@@ -18,9 +13,8 @@ var gulp = require("gulp"),
 gulp.task("clean", function () {
     return del([
         "src/**/*.js",
-        "test/**/*.test.js",
         "src/*.js",
-        "test/*.test.js",
+        "test/*.spec.js",
         "lib",
         "es",
         "amd"
@@ -39,7 +33,7 @@ gulp.task("lint", function() {
 
     return gulp.src([
             "src/**/**.ts",
-            "test/**/**.test.ts"
+            "test/**/**.spec.ts"
         ])
         .pipe(tslint(config))
         .pipe(tslint.report());
@@ -139,12 +133,15 @@ gulp.task("build-test", function() {
 gulp.task("mocha", function() {
     return gulp.src([
             "node_modules/reflect-metadata/Reflect.js",
-            "test/**/*.test.js"
+            "test/**/*.spec.js"
         ])
         .pipe(mocha({
             ui: "bdd"
         }))
-        .pipe(istanbul.writeReports());
+        .pipe(istanbul.writeReports())
+        .pipe(istanbul.enforceThresholds({ thresholds: 
+            { lines: 80, functions: 100, branches: 50, statements:  85  } 
+        }));
 });
 
 gulp.task("istanbul:hook", function() {
@@ -155,35 +152,20 @@ gulp.task("istanbul:hook", function() {
         .pipe(istanbul.hookRequire());
 });
 
-gulp.task("test", function(cb) {
-    runSequence("istanbul:hook", "mocha", cb);
-});
 
-gulp.task("build", function(cb) {
-    runSequence(
-        ["build-src", "build-es", "build-lib", "build-dts"], // tests + build es and lib
-        "build-test",
-        cb);
-});
+const test = gulp.series("istanbul:hook", "mocha");
+
+
+gulp.task("build",gulp.series(
+        gulp.parallel(["build-src", "build-es", "build-lib", "build-dts"]),
+        "build-test"
+))
 
 //******************************************************************************
 //* DEFAULT
 //******************************************************************************
-gulp.task("default", function(cb) {
-    runSequence(
-        "clean",
-        "build",
-        "test",
-        cb);
-});
-
-gulp.task("cleanAndBuild", function(cb) {
-    runSequence(
-        "clean",
-        "build",
-        cb);
-})
-
-gulp.task("watch", function() {
-    gulp.watch('src/*.ts', ['cleanAndBuild'])
-});
+exports.test = test
+exports.default = gulp.series("clean", "build", test)
+exports.watch = function() {
+    gulp.watch('src/*.ts',gulp.series("clean", "build"))
+};

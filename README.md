@@ -1,7 +1,5 @@
 # inversify-hapijs-utils
 
-> Note: this project is still a work in progress and does not have any test coverage.
-
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
@@ -117,7 +115,7 @@ Registers the decorated controller method as a request handler for a particular 
 
 ### `@SHORTCUT(path, [middleware, ...])`
 
-Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Head`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
+Shortcut decorators which are simply wrappers for `@Method`. Right now these include `@Get`, `@Post`, `@Put`, `@Patch`, `@Delete`, and `@Options`. For anything more obscure, use `@Method` (Or make a PR :smile:).
 
 ## Middleware
 Middleware can be either an instance of `RequestHandler` or an InversifyJS service identifier. To stop processing you will need to return a Boom error or a javascript Error.
