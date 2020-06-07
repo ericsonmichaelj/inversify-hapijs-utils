@@ -4,7 +4,8 @@ const gulp = require("gulp"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del')
+    del = require('del'),
+    { execFile, exec } = require('child_process');
 
 
 //******************************************************************************
@@ -113,59 +114,34 @@ gulp.task("build-src", function() {
 });
 
 var tsTestProject = tsc.createProject("tsconfig.json");
-gulp.task("build-test", function() {
-    return gulp.src([
-            "test/**/*.ts"
-        ])
-        .pipe(sourcemaps.init())
-        .pipe(tsTestProject())
-        .on("error", function(err) {
-            process.exit(1);
-        })
-        .js.pipe(sourcemaps.write(".", {
-            sourceRoot: function (file) {
-                return file.cwd + '/test';
-            }
-        }))
-        .pipe(gulp.dest("test/"));;
+
+gulp.task("test:latest", function(cb) {
+    exec("./node_modules/.bin/nyc ./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts", (err, stdout, stderr) => {
+        console.log(stdout);
+        console.error(stderr);
+        if(err) throw err;
+        cb()
+    });
 });
 
-gulp.task("mocha", function() {
-    return gulp.src([
-            "node_modules/reflect-metadata/Reflect.js",
-            "test/**/*.spec.js"
-        ])
-        .pipe(mocha({
-            ui: "bdd"
-        }))
-        .pipe(istanbul.writeReports())
-        .pipe(istanbul.enforceThresholds({ thresholds: 
-            { lines: 80, functions: 100, branches: 50, statements:  85  } 
-        }));
+gulp.task("test:hapi18", function(cb) {
+    execFile('./test_hapiv18.sh', (error, stdout, stderr) => {
+        console.log(stdout);
+        console.error(stderr);
+        if(error) throw error
+        cb()
+    });
 });
 
-gulp.task("istanbul:hook", function() {
-    return gulp.src(["src/**/*.js"])
-        // Covering files
-        .pipe(istanbul())
-        // Force `require` to return covered files
-        .pipe(istanbul.hookRequire());
-});
+gulp.task("test", gulp.series("test:latest", "test:hapi18"))
 
-
-const test = gulp.series("istanbul:hook", "mocha");
-
-
-gulp.task("build",gulp.series(
-        gulp.parallel(["build-src", "build-es", "build-lib", "build-dts"]),
-        "build-test"
-))
+gulp.task("build",gulp.parallel(["build-src", "build-es", "build-lib", "build-dts"]))
 
 //******************************************************************************
 //* DEFAULT
 //******************************************************************************
-exports.test = test
-exports.default = gulp.series("clean", "build", test)
+
+exports.default = gulp.series("clean", "build", "test")
 exports.watch = function() {
     gulp.watch('src/*.ts',gulp.series("clean", "build"))
 };

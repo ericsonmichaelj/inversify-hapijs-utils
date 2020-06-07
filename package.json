@@ -7,6 +7,7 @@
   "typings": "./dts/index.d.ts",
   "scripts": {
     "test": "nyc mocha -r ts-node/register test/**/*.spec.ts",
+    "test:hapiv18": "./hapiv18.sh",
     "publish-please": "publish-please",
     "prepare": "publish-please guard"
   },
@@ -59,7 +60,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@hapi/hapi": "^19.1.1",
+    "@hapi/hapi": ">=18.4.1",
     "inversify": "^5.0.1"
   },
   "nyc": {
@@ -69,10 +70,22 @@
     ],
     "check-coverage": true,
     "watermarks": {
-        "lines": [80, 95],
-        "functions": [80, 95],
-        "branches": [80, 95],
-        "statements": [80, 95]
+      "lines": [
+        80,
+        95
+      ],
+      "functions": [
+        80,
+        95
+      ],
+      "branches": [
+        80,
+        95
+      ],
+      "statements": [
+        80,
+        95
+      ]
     }
   }
 }
