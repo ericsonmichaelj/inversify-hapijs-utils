@@ -1,16 +1,12 @@
-"use strict";
-
-//******************************************************************************
-//* DEPENDENCIES
-//******************************************************************************
-var gulp = require("gulp"),
+const gulp = require("gulp"),
     tslint = require("gulp-tslint"),
     tsc = require("gulp-typescript"),
-    runSequence = require("run-sequence"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require('del');
+    del = require('del'),
+    { execFile, exec } = require('child_process');
+
 
 //******************************************************************************
 //* CLEAN
@@ -38,7 +34,7 @@ gulp.task("lint", function() {
 
     return gulp.src([
             "src/**/**.ts",
-            "test/**/**.test.ts"
+            "test/**/**.spec.ts"
         ])
         .pipe(tslint(config))
         .pipe(tslint.report());
@@ -118,60 +114,42 @@ gulp.task("build-src", function() {
 });
 
 var tsTestProject = tsc.createProject("tsconfig.json");
-gulp.task("build-test", function() {
-    return gulp.src([
-            "test/**/*.ts"
-        ])
-        .pipe(sourcemaps.init())
-        .pipe(tsTestProject())
-        .on("error", function(err) {
-            process.exit(1);
-        })
-        .js.pipe(sourcemaps.write(".", {
-            sourceRoot: function (file) {
-                return file.cwd + '/test';
-            }
-        }))
-        .pipe(gulp.dest("test/"));;
-});
-
-gulp.task("mocha", function() {
-    return gulp.src([
-            "node_modules/reflect-metadata/Reflect.js",
-            "test/*.spec.js"
-        ])
-        .pipe(mocha({
-            ui: "bdd"
-        }))
-        .pipe(istanbul.writeReports());
-});
-
-gulp.task("istanbul:hook", function() {
-    return gulp.src(["src/**/*.js"])
-        // Covering files
-        .pipe(istanbul())
-        // Force `require` to return covered files
-        .pipe(istanbul.hookRequire());
-});
 
 gulp.task("test", function(cb) {
-    runSequence("istanbul:hook", "mocha", cb);
+    exec("./node_modules/.bin/nyc ./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts", (err, stdout, stderr) => {
+        console.log(stdout);
+        console.error(stderr);
+        if(err) throw err;
+        cb()
+    });
 });
 
-gulp.task("build", function(cb) {
-    runSequence(
-        ["build-src", "build-es", "build-lib", "build-dts"], // tests + build es and lib
-        "build-test",
-        cb);
+gulp.task("test:hapi18", function(cb) {
+    execFile('./test_hapiv18.sh', (error, stdout, stderr) => {
+        console.log(stdout);
+        console.error(stderr);
+        if(error) throw error
+        cb()
+    });
 });
+
+gulp.task("build",gulp.parallel(["build-src", "build-es", "build-lib", "build-dts"]))
 
 //******************************************************************************
 //* DEFAULT
 //******************************************************************************
-gulp.task("default", function(cb) {
-    runSequence(
+
+exports.default = gulp.series("clean", "build", "test")
+exports.watch = function() {
+    gulp.watch('src/*.ts',gulp.series("clean", "build"))
+};;
+
+gulp.task("build", gulp.parallel("build-src", "build-es", "build-lib", "build-dts")) 
+
+//******************************************************************************
+//* DEFAULT
+//******************************************************************************
+exports.default = gulp.series(
         "clean",
         "build",
-        "test",
-        cb);
-});
+        "test")
