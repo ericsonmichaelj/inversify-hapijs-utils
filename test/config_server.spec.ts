@@ -12,7 +12,7 @@ import { InversifyHapiServer,
 } from "../src";
 import { injectable } from "inversify";
 import { Container } from "inversify";
-import * as Boom from "boom";
+import * as Boom from "@hapi/boom";
 
 export const securityHandler = (req: Request) => {
     // Return a Boom (or any Error) if you want processing to stop

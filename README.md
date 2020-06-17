@@ -1,5 +1,7 @@
 # inversify-hapijs-utils
 
+[![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![Build Status](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils.svg?branch=master)](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils)
+
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:

@@ -1,6 +1,9 @@
 before_script:
-  - npm install; npm install -g gulp
-script: gulp --unhandled-rejections=strict
+  - npm install & npm install -g typescript & npm install -g ts-node
+script: ./node_modules/.bin/gulp
 language: node_js
 node_js:
   - "12"
+after_success: npm run coverage
+env:
+  - CODECOV_TOKEN=f22ec383-4497-4cbd-a4ef-fb8750b362e9
