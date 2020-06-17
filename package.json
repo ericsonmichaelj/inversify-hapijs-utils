@@ -7,7 +7,7 @@
   "typings": "./dts/index.d.ts",
   "scripts": {
     "coverage": "codecov",
-    "test": "nyc --reporter=lcov mocha -r ts-node/register test/**/*.spec.ts",
+    "test": "nyc --reporter=lcov ts-mocha -r ts-node/register test/**/*.spec.ts",
     "test:hapiv18": "./hapiv18.sh",
     "publish-please": "publish-please",
     "prepare": "publish-please guard"

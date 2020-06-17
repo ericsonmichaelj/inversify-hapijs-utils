@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "lib": ["es6", "dom"],
-        "types": ["reflect-metadata", "node"],
+        "types": ["reflect-metadata", "node", "mocha"],
         "typeRoots": [ "node_modules/@types" ],
         "module": "commonjs",
         "sourceMap": true,
