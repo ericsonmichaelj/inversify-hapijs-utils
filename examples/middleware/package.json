@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha -r ts-node/register test/**/*.spec.ts",
-    "start": "node --no-lazy -r ts-node/register server.ts",
+    "start": "node --no-lazy -r ts-node/register src/index.ts",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
   },
@@ -14,16 +14,16 @@
   "license": "ISC",
   "dependencies": {
     "@types/hapi": "^17.8.8",
-    "hapi": "^17.8.5",
     "hapi-pino": "^8.0.1",
     "inversify": "^5.0.1",
     "inversify-hapijs-utils": "file:../..",
-    "mocha": "^7.2.0",
-    "nyc": "^15.0.1",
     "reflect-metadata": "^0.1.13",
-    "typescript": "^2.9.2",
+    "typescript": "^2.9.2"
+  },
+  "devDependencies": {
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
     "snyk": "^1.342.2"
   },
-  "devDependencies": {},
   "snyk": true
 }
