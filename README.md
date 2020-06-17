@@ -1,6 +1,8 @@
 # inversify-hapijs-utils
 
-[![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![Build Status](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils.svg?branch=master)](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils)
+[![NPM Version]([![npm version](https://badge.fury.io/js/inversify-hapijs-utils.svg)](https://badge.fury.io/js/inversify-hapijs-utils) [![NPM Downloads][https://npmcharts.com/compare/express?minimal=true]](https://npmcharts.com/compare/express?minimal=true) [![Build Status](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils.svg?branch=master)](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils)
+[![codecov](https://codecov.io/gh/ericsonmichaelj/inversify-hapijs-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/ericsonmichaelj/inversify-hapijs-utils)
+
 
 ## Version Support
 
