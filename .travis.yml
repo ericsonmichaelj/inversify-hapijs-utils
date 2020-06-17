@@ -1,6 +1,6 @@
 before_script:
   - npm install; npm install -g gulp
-script: gulp
+script: gulp --unhandled-rejections=strict
 language: node_js
 node_js:
   - "12"
