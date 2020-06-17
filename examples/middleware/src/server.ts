@@ -6,7 +6,7 @@ import { interfaces } from "inversify-hapijs-utils";
 import { FooController, BarController, BazController } from "./controllers";
 import { loggingHandler, securityHandler } from "./middleware";
 import { FooService } from "./interfaces";
-import { FooServiceImpl } from "../services";
+import { FooServiceImpl } from "./services";
 // // set up container
 let container = new Container();
 container.bind<FooService>(CONSTANTS.FooService).to(FooServiceImpl);
