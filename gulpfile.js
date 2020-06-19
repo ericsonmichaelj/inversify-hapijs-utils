@@ -114,7 +114,7 @@ gulp.task("build-src", function() {
 var tsTestProject = tsc.createProject("tsconfig.json");
 
 gulp.task("test", function(cb) {
-    exec("./node_modules/.bin/nyc ./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts", (err, stdout, stderr) => {
+    exec("./node_modules/.bin/nyc --reporter=lcov ./node_modules/.bin/ts-mocha test/**/*.spec.ts --unhandled-rejections=strict", (err, stdout, stderr) => {
         console.log(stdout);
         console.error(stderr);
         if(err) throw err;

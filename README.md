@@ -1,6 +1,6 @@
 # inversify-hapijs-utils
 
-> Note: this project is still a work in progress and does not have any test coverage.
+> Warning: This project uses a depreciated version of hapi that contains security vulnerabilities. Read here(https://www.npmjs.com/package/hapi) for more. Please considering upgrading to latest.
 
 ## Version Support
 
@@ -10,8 +10,7 @@ The version of inversify-hapijs-utils depends on which version of hapi you plan 
 | ------ | ------ | ------ | 
 |  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
 | [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.2)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.0.1) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.0.0) | ^19.1.1 | n/a 
+| [^3.2.0](https://www.npmjs.com/package/inversify-hapijs-utils) | >=18.4.1 | n/a 
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
