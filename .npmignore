@@ -1,9 +1,12 @@
 examples
 coverage
 node_modles
-es
-src/*.js
-src/*.map
-test
+src
 gulpfile.js
 build.sh
+dockerfile
+.travis.yml
+test
+.nyc_output
+tsconfig.json
+tslint.json

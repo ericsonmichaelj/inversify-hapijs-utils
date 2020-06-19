@@ -1,12 +1,13 @@
 {
   "name": "inversify-hapijs-utils",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Some utilities for the development of hapijs rest applications with Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "typings": "./dts/index.d.ts",
   "scripts": {
-    "test": "nyc mocha -r ts-node/register test/**/*.ts",
+    "test": "nyc ts-mocha test/**/*.spec.ts  --unhandled-rejections=strict",
+    "coverage": "codecov",
     "publish-please": "publish-please",
     "prepare": "publish-please guard"
   },
@@ -35,6 +36,9 @@
     "@types/node": "8.0.53",
     "@types/sinon": "4.0.0",
     "@types/supertest": "2.0.3",
+    "boom": "^7.3.0",
+    "chai": "^4.1.2",
+    "codecov": "^3.7.0",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.1",
@@ -45,8 +49,10 @@
     "nyc": "^15.1.0",
     "publish-please": "^5.5.1",
     "reflect-metadata": "^0.1.10",
+    "snyk": "^1.346.0",
     "source-map-support": "0.5.0",
     "supertest": "^3.0.0",
+    "ts-mocha": "^7.0.0",
     "tslint": "5.8.0",
     "typescript": "^2.9.2"
   },

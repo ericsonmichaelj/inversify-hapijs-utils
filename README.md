@@ -1,21 +1,20 @@
 # inversify-hapijs-utils
 
+[![codecov](https://codecov.io/gh/ericsonmichaelj/inversify-hapijs-utils/branch/release/hapi-v17/graph/badge.svg)](https://codecov.io/gh/ericsonmichaelj/inversify-hapijs-utils/branch/release%2Fhapi-v17)
+
+[![Build Status](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils.svg?branch=release%2Fhapi-v17)](https://travis-ci.org/ericsonmichaelj/inversify-hapijs-utils)
+
+> Note: This project uses a depreciated version of hapi that contains security vulnerabilities. Read here(https://www.npmjs.com/package/hapi) for more. Please considering upgrading to latest.
+
 ## Version Support
 
 The version of inversify-hapijs-utils depends on which version of hapi you plan on using. Below lists the corresponding version of hapi used for each inversify-hapijs-utils version:
 
 | inversify-hapijs-utils | @hapi/hapi | hapi
 | ------ | ------ | ------ | 
-|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.5) | n/a | ^16.6.2
-<<<<<<< HEAD
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.1.0)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.1.0) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.1.0) | ^19.1.1 | n/a
-=======
-| [1.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.0.3)  | n/a | ^17.8.5
-| [2.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/2.2.0) | ^18.4.1 | n/a
-| [3.x.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/3.2.0) | ^19.1.1 | n/a
->>>>>>> 9dd37f1... Add tests into build
+|  [0.0.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/0.0.7) | n/a | ^16.6.2
+| [1.2.x](https://www.npmjs.com/package/inversify-hapijs-utils/v/1.2.0)  | n/a | ^17.8.5
+| [^3.2.0](https://www.npmjs.com/package/inversify-hapijs-utils) | >=18.4.1 | n/a 
 
 ## Installation
 You can install `inversify-hapijs-utils` using npm:
@@ -140,7 +139,6 @@ The simplest way to use middleware is to define a `RequestHandler` instance and 
 
 ```ts
 // ...
-import { ReplyNoContinue } from "hapi";
 import * as Boom from "boom";
 
 const loggingHandler = (req: Request) => {
