@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/hapi": "^17.8.8",
+    "@types/hapi": "^17.8.9",
     "hapi-pino": "^8.0.1",
     "inversify": "^5.0.1",
     "inversify-hapijs-utils": "file:../..",
