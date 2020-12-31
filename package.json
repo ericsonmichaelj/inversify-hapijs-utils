@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@hapi/hapi": ">=18.4.1",
-    "inversify": "^5.0.1"
+    "inversify": "^5.0.5"
   },
   "nyc": {
     "exclude": [
