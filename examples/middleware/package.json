@@ -23,7 +23,7 @@
   "devDependencies": {
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
-    "snyk": "^1.342.2"
+    "snyk": "^1.1024.0"
   },
   "snyk": true
 }
