@@ -51,7 +51,7 @@
     "gulp-tslint": "8.1.2",
     "gulp-typescript": "^3.2.4",
     "hapi-pino": "^8.0.1",
-    "mocha": "^7.2.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.0.1",
     "publish-please": "^5.5.1",
     "reflect-metadata": "^0.1.10",
