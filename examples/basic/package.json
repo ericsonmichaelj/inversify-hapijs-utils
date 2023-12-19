@@ -16,7 +16,7 @@
     "inversify": "^5.0.1",
     "inversify-hapijs-utils": "file:../..",
     "reflect-metadata": "^0.1.13",
-    "supertest": "^4.0.2",
+    "supertest": "^6.2.0",
     "typescript": "^2.9.2"
   },
   "devDependencies": {
